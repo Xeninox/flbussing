@@ -1,0 +1,118 @@
+function myMap() {
+	var directionsService = new google.maps.DirectionsService();
+	var directionsDisplay = new google.maps.DirectionsRenderer();
+
+	var ashesiUniversity = {
+		info : '<strong>Princess Michelle</strong><br>\
+		Number: 0241352320', 
+		lat: 5.759928,
+		lng: -0.219804
+	};
+
+	var abuomJunction = {
+		info : '<strong>Princess Michelle</strong><br>\
+		Number: 0241352320', 
+		lat: 5.6959660,
+		lng: -0.2484250
+	};
+
+	var kasoaSecocndNewTimers = {
+		info : '<strong>James Yartey</strong><br>\
+		Number: 0246801648', 
+		lat: 5.535335,
+		lng:  -0.418436
+	};
+
+	var amanfrom = {
+		info : '<strong>James Yartey</strong><br>\
+		Number: 0246801648', 
+		lat: 5.535589,
+		lng:  -0.411972
+	};
+
+	var firstLoveCenter = {
+		info: '<strong>Welcome to the First Love Center</strong>',
+		lat: 5.656149,
+		lng: -0.166920
+	};
+
+
+	var allLocations = [
+
+	[ashesiUniversity.info, ashesiUniversity.lat, ashesiUniversity.lng, 0],
+	[abuomJunction.info, abuomJunction.lat, abuomJunction.lng, 1],
+	[kasoaSecocndNewTimers.info, kasoaSecocndNewTimers.lat, kasoaSecocndNewTimers.lng, 2],
+	[amanfrom.info, amanfrom.lat, amanfrom.lng, 3],
+	[firstLoveCenter.info, firstLoveCenter.lat, firstLoveCenter.lng, 4]
+	];
+
+	var map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 11	,
+		center: new google.maps.LatLng(5.759928, -0.219804),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	});
+
+	var infowindow = new google.maps.InfoWindow({});
+
+	var marker, i;
+
+	for (i = 0; i < allLocations.length; i++) {
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(allLocations[i][1], allLocations[i][2]),
+			map: map
+		});
+
+		google.maps.event.addListener(marker, 'click', (function (marker, i) {
+			return function () {
+				infowindow.setContent(allLocations[i][0]);
+				infowindow.open(map, marker);
+			}
+		})(marker, i));
+	}
+
+/*
+
+	// draw the route between two points
+	var start = new google.maps.LatLng(5.759928, -0.219804);
+	var end = new google.maps.LatLng(5.6959660,-0.2484250);
+
+	var request = {
+		origin: start,
+		destination: end,
+		travelMode: google.maps.TravelMode.DRIVING
+	};
+	directionsService.route(request, function(response, status){
+		if (status == google.maps.DirectionsStatus.OK){
+			directionsDisplay.setDirections(response);
+			directionsDisplay.setMap(map);
+		} else {
+			alert('Failure! Could not draw route because ' + status);
+		}
+	});
+	*/
+	var first = new google.maps.LatLng(5.535335, -0.418436);
+	var second = new google.maps.LatLng(5.535589, -0.411972);
+	var third = new google.maps.LatLng(5.656149, -0.166920);
+
+
+	var request = {
+		origin: first,
+		destination: third,
+		waypoints: [{location: first, stopover: false},
+		{location: second, stopover: true}, {location: third, stopover: false}],
+		optimizeWaypoints: true,
+		travelMode: google.maps.DirectionsTravelMode.WALKING
+	};
+	directionsService.route(request, function (response, status) {
+		if (status == google.maps.DirectionsStatus.OK) {
+			directionsDisplay.setDirections(response);
+			var route = response.routes[0];
+			alert("hello");
+		} else {
+			alert("directions response " + status);
+		}
+	});
+
+
+}
+
